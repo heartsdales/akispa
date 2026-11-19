@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #e71b7c;
+  --color-primary-strong: #c8106a;
+  --color-primary-soft: #fff0f7;
+  --color-primary-ink: #b50b5c;
+  --color-sand: #f3ebde;
+  --color-surface: #fffdf9;
+  --color-ink: #28352e;
+  --color-forest: #203a31;
+  --color-line: #e6e1d9;
+  --color-line-strong: #ddd7ce;
+  --color-muted: #747a73;
+  --color-plum: #382b32;
+  --color-cream: #f5f1e8;
+
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-cormorant), ui-serif, Georgia, serif;
+
+  --shadow-panel: 0 8px 35px rgb(23 40 27 / 0.035);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+  body {
+    @apply bg-sand text-ink font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-primary text-white;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.3em];
+  }
+  .panel {
+    @apply rounded-[13px] border border-line bg-surface p-5 shadow-panel sm:p-[26px];
+  }
+  .panel-title {
+    @apply mb-5 font-heading text-[29px] leading-tight font-medium;
+  }
+  .field-label {
+    @apply mb-2.5 block text-xs font-bold tracking-[0.06em] uppercase;
+  }
+  .input {
+    @apply w-full rounded-[7px] border border-line-strong bg-white p-3.5 text-ink placeholder:text-muted/70;
+  }
+  .chip {
+    @apply rounded-[7px] border border-line-strong bg-white px-4 py-3 text-sm text-ink transition-colors hover:border-primary/50 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line-strong;
+  }
+  .chip[aria-pressed="true"],
+  .chip[aria-checked="true"] {
+    @apply border-primary bg-primary-soft shadow-[inset_0_0_0_1px_var(--color-primary)];
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-strong disabled:cursor-not-allowed disabled:opacity-60;
+  }
+}

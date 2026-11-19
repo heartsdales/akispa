@@ -1,0 +1,10 @@
+{
+  "name": "akispa",
+  "private": true,
+  "packageManager": "pnpm@12.21.0",
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm -r lint"
+  }
+}
