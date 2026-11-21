@@ -15,8 +15,10 @@ import {
   slots,
   therapistOptions,
   toISODate,
+  treatmentOptions,
   type Duration,
   type TherapistPreference,
+  type Treatment,
 } from "@/lib/booking";
 import { CheckoutDialog, type CheckoutDialogHandle } from "./CheckoutDialog";
 
@@ -36,11 +38,12 @@ function useNowMinute(): Date | null {
 const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 
 export function BookingForm() {
-  const ids = { outlet: useId(), duration: useId(), guests: useId(), therapist: useId(), date: useId(), time: useId() };
+  const ids = { outlet: useId(), treatment: useId(), duration: useId(), guests: useId(), therapist: useId(), date: useId(), time: useId() };
   const dialog = useRef<CheckoutDialogHandle>(null);
   const now = useNowMinute();
 
   const [outletId, setOutletId] = useState(outlets[0].id);
+  const [treatment, setTreatment] = useState<Treatment>("aroma");
   const [duration, setDuration] = useState<Duration>(60);
   const [guests, setGuests] = useState(1);
   const [therapist, setTherapist] = useState<TherapistPreference>("any");
@@ -60,6 +63,7 @@ export function BookingForm() {
 
   const q = useMemo(() => quote(duration, guests, time), [duration, guests, time]);
   const outlet = outlets.find((o) => o.id === outletId) ?? outlets[0];
+  const treatmentLabel = treatmentOptions.find((t) => t.value === treatment)?.label ?? "";
   const therapistLabel = therapistOptions.find((t) => t.value === therapist)?.label ?? "";
 
   function continueToCheckout() {
@@ -78,7 +82,7 @@ export function BookingForm() {
 
   const summary: [string, React.ReactNode][] = [
     ["Outlet", outlet.name],
-    ["Treatment", "Choose in store"],
+    ["Treatment", treatmentLabel],
     ["Duration", `${duration} minutes`],
     ["Basic price", formatRM(q.base) + (guests > 1 ? " total" : "")],
     ["Time-slot discount", `${q.discountPercent}% OFF`],
@@ -109,9 +113,22 @@ export function BookingForm() {
                 </option>
               ))}
             </select>
-            <p className="mb-6 rounded-[9px] bg-sand p-5 text-center font-heading text-[26px] sm:text-[30px]">
-              Choose your treatment in store
+            <p id={ids.treatment} className="field-label">
+              Choose your treatment
             </p>
+            <div role="group" aria-labelledby={ids.treatment} className="mb-6 flex flex-wrap gap-2.5">
+              {treatmentOptions.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  className="chip"
+                  aria-pressed={treatment === t.value}
+                  onClick={() => setTreatment(t.value)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
             <p id={ids.duration} className="field-label">
               Choose your session duration
             </p>
@@ -254,7 +271,7 @@ export function BookingForm() {
             </dl>
             <hr className="my-5 border-line" />
             <p className="text-xs leading-relaxed text-muted">
-              Discount is applied to the basic session price for the selected time slot. Choose your treatment in store.
+              Discount is applied to the basic session price for the selected time slot.
             </p>
             <button type="button" className="btn-primary mt-4 w-full rounded-lg py-4" onClick={continueToCheckout}>
               Continue to Checkout →
@@ -278,9 +295,9 @@ export function BookingForm() {
 
       <CheckoutDialog
         ref={dialog}
-        request={{ outletId, durationMinutes: duration, guests, therapistPreference: therapist, date, time }}
+        request={{ outletId, treatment, durationMinutes: duration, guests, therapistPreference: therapist, date, time }}
         totalSen={q.total}
-        summary={`${outlet.name} · ${duration} mins · ${guests} guest${guests > 1 ? "s" : ""} · ${date ? formatDisplayDate(date) : ""} ${time}`}
+        summary={`${outlet.name} · ${treatmentLabel} · ${duration} mins · ${guests} guest${guests > 1 ? "s" : ""} · ${date ? formatDisplayDate(date) : ""} ${time}`}
       />
     </>
   );

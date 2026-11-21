@@ -1,7 +1,7 @@
 const features = [
   {
-    title: "Choose your treatment in store",
-    body: "Reserve your time now and decide on the day. Our therapists will guide you through aromatherapy, deep tissue, traditional body massage and couples rituals.",
+    title: "Choose your treatment online",
+    body: "Pick aroma, traditional or Luca massage when you book, so your therapist is ready for you the moment you arrive.",
   },
   {
     title: "Pay less off-peak",

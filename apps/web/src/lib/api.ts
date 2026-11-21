@@ -1,7 +1,8 @@
-import type { Duration, TherapistPreference } from "./booking";
+import type { Duration, TherapistPreference, Treatment } from "./booking";
 
 export type CreateBookingRequest = {
   outletId: string;
+  treatment: Treatment;
   durationMinutes: Duration;
   guests: number;
   therapistPreference: TherapistPreference;

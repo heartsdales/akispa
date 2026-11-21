@@ -1,7 +1,7 @@
 export const faqs = [
   {
     q: "Do I need to choose my treatment when booking?",
-    a: "No. You reserve the session length, date and time online, then choose your treatment with our therapists when you arrive.",
+    a: "Yes. Pick aroma, traditional or Luca massage along with your session length, date and time when you book online.",
   },
   {
     q: "How do time-slot discounts work?",

@@ -73,7 +73,7 @@ export default function HomePage() {
             Book Your Experience
           </h2>
           <p className="mt-2 mb-10 text-center text-muted">
-            Choose your preferred date and time. Select your treatment when you arrive.
+            Choose your treatment, preferred date and time.
           </p>
           <BookingForm />
         </section>

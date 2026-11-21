@@ -10,6 +10,14 @@ export type Outlet = { id: string; name: string };
 
 export type Duration = 60 | 90 | 120;
 
+export type Treatment = "aroma" | "traditional" | "luca";
+
+export const treatmentOptions: { value: Treatment; label: string }[] = [
+  { value: "aroma", label: "Aroma massage" },
+  { value: "traditional", label: "Traditional massage" },
+  { value: "luca", label: "Luca massage" },
+];
+
 export type TherapistPreference = "any" | "female" | "male";
 
 export type Slot = { time: string; discountPercent: number };
