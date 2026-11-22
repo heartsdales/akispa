@@ -1,17 +1,17 @@
 "use client";
 
-import { useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useId, useRef, useState, useSyncExternalStore } from "react";
 import {
   BOOKING_WINDOW_DAYS,
   MAX_GUESTS,
   MIN_GUESTS,
-  durations,
+  durationsFor,
   formatDisplayDate,
   formatRM,
   isSlotPast,
   outlets,
   quote,
-  sessionPrices,
+  getTreatment,
   slots,
   therapistOptions,
   toISODate,
@@ -43,8 +43,8 @@ export function BookingForm() {
   const now = useNowMinute();
 
   const [outletId, setOutletId] = useState(outlets[0].id);
-  const [treatment, setTreatment] = useState<Treatment>("aroma");
-  const [duration, setDuration] = useState<Duration>(60);
+  const [treatment, setTreatment] = useState<Treatment>("urut-aroma");
+  const [pickedDuration, setDuration] = useState<Duration>(60);
   const [guests, setGuests] = useState(1);
   const [therapist, setTherapist] = useState<TherapistPreference>("any");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
@@ -61,9 +61,14 @@ export function BookingForm() {
   const firstOpen = slots.find((s) => !slotPast(s.time))?.time;
   const time = slotPast(pickedTime) ? firstOpen ?? pickedTime : pickedTime;
 
-  const q = useMemo(() => quote(duration, guests, time), [duration, guests, time]);
+  const service = getTreatment(treatment);
+  const durations = durationsFor(treatment);
+  // Fall back to the shortest offered length when the treatment doesn't come in the picked one.
+  const duration = durations.includes(pickedDuration) ? pickedDuration : durations[0];
+
+  const q = quote(treatment, duration, guests, time);
   const outlet = outlets.find((o) => o.id === outletId) ?? outlets[0];
-  const treatmentLabel = treatmentOptions.find((t) => t.value === treatment)?.label ?? "";
+  const treatmentLabel = service.label;
   const therapistLabel = therapistOptions.find((t) => t.value === therapist)?.label ?? "";
 
   function continueToCheckout() {
@@ -116,16 +121,21 @@ export function BookingForm() {
             <p id={ids.treatment} className="field-label">
               Choose your treatment
             </p>
-            <div role="group" aria-labelledby={ids.treatment} className="mb-6 flex flex-wrap gap-2.5">
+            <div role="group" aria-labelledby={ids.treatment} className="mb-6 grid gap-3 sm:grid-cols-2">
               {treatmentOptions.map((t) => (
                 <button
                   key={t.value}
                   type="button"
-                  className="chip"
+                  className="chip min-h-[105px] rounded-[9px] p-[17px] text-left"
                   aria-pressed={treatment === t.value}
                   onClick={() => setTreatment(t.value)}
                 >
-                  {t.label}
+                  <span className="mb-2 block font-bold">{t.label}</span>
+                  {durationsFor(t.value).map((d) => (
+                    <span key={d} className="block text-xs text-muted">
+                      {d} mins · RM{t.prices[d]}
+                    </span>
+                  ))}
                 </button>
               ))}
             </div>
@@ -135,7 +145,7 @@ export function BookingForm() {
             <div role="group" aria-labelledby={ids.duration} className="flex flex-wrap gap-2.5">
               {durations.map((d) => (
                 <button key={d} type="button" className="chip" aria-pressed={duration === d} onClick={() => setDuration(d)}>
-                  {d} mins · RM{sessionPrices[d]}
+                  {d} mins · RM{service.prices[d]}
                 </button>
               ))}
             </div>
@@ -271,7 +281,8 @@ export function BookingForm() {
             </dl>
             <hr className="my-5 border-line" />
             <p className="text-xs leading-relaxed text-muted">
-              Discount is applied to the basic session price for the selected time slot.
+              Discount is applied to the basic session price for the selected time slot. Treatment and duration
+              determine the basic price.
             </p>
             <button type="button" className="btn-primary mt-4 w-full rounded-lg py-4" onClick={continueToCheckout}>
               Continue to Checkout →

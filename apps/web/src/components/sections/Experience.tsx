@@ -1,11 +1,13 @@
+import { maxDiscount } from "@/lib/booking";
+
 const features = [
   {
     title: "Choose your treatment online",
-    body: "Pick aroma, traditional or Luca massage when you book, so your therapist is ready for you the moment you arrive.",
+    body: "Pick Urut Aroma, Urut Kering or Lava Luxe hot stone massage when you book, so your therapist is ready for you the moment you arrive.",
   },
   {
     title: "Pay less off-peak",
-    body: "Every half-hour slot carries its own discount. Visit during quieter hours and save up to 60% on the basic session price.",
+    body: `Every half-hour slot carries its own discount. Visit during quieter hours and save up to ${maxDiscount}% on the basic session price.`,
   },
   {
     title: "Your therapist, your way",

@@ -21,7 +21,7 @@ export function Hero() {
           Your Moment of Calm
         </h1>
         <p className="mx-auto max-w-[560px] leading-relaxed text-white/90">
-          A peaceful escape on Gaya Street, Kota Kinabalu — designed to renew your body, mind and spirit.
+          A peaceful escape designed to renew your body, mind and spirit.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a href="#booking" className="btn-primary">

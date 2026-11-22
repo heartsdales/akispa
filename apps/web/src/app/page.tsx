@@ -5,7 +5,7 @@ import { Faq, faqs } from "@/components/sections/Faq";
 import { Visit } from "@/components/sections/Visit";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { sessionPrices } from "@/lib/booking";
+import { allPrices, durationsFor, treatmentOptions } from "@/lib/booking";
 import { absoluteUrl, site } from "@/lib/site";
 
 const jsonLd = {
@@ -18,7 +18,7 @@ const jsonLd = {
       url: absoluteUrl("/"),
       image: site.heroImage,
       description: site.description,
-      priceRange: `RM${Math.min(...Object.values(sessionPrices))}–RM${Math.max(...Object.values(sessionPrices))}`,
+      priceRange: `RM${Math.min(...allPrices)}–RM${Math.max(...allPrices)}`,
       currenciesAccepted: site.currency,
       ...(site.phone && { telephone: site.phone }),
       ...(site.email && { email: site.email }),
@@ -36,12 +36,14 @@ const jsonLd = {
         opens: site.openingHours.opens,
         closes: site.openingHours.closes,
       },
-      makesOffer: Object.entries(sessionPrices).map(([mins, price]) => ({
-        "@type": "Offer",
-        name: `${mins}-minute spa session`,
-        price,
-        priceCurrency: site.currency,
-      })),
+      makesOffer: treatmentOptions.flatMap((t) =>
+        durationsFor(t.value).map((mins) => ({
+          "@type": "Offer",
+          name: `${t.label} · ${mins} minutes`,
+          price: t.prices[mins],
+          priceCurrency: site.currency,
+        })),
+      ),
       potentialAction: {
         "@type": "ReserveAction",
         target: absoluteUrl("/#booking"),
@@ -73,7 +75,7 @@ export default function HomePage() {
             Book Your Experience
           </h2>
           <p className="mt-2 mb-10 text-center text-muted">
-            Choose your treatment, preferred date and time.
+            Choose your treatment, session duration, and preferred appointment time.
           </p>
           <BookingForm />
         </section>

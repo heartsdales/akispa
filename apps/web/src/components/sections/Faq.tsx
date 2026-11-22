@@ -1,11 +1,11 @@
 export const faqs = [
   {
     q: "Do I need to choose my treatment when booking?",
-    a: "Yes. Pick aroma, traditional or Luca massage along with your session length, date and time when you book online.",
+    a: "Yes. Pick Urut Aroma, Urut Kering or Lava Luxe hot stone massage along with your session length, date and time when you book online.",
   },
   {
     q: "How do time-slot discounts work?",
-    a: "Each 30-minute start time has its own discount, applied to the basic session price. The discount is shown on every slot before you book.",
+    a: "Each 30-minute start time has its own discount, applied to the basic session price for your treatment and duration. The discount is shown on every slot before you book.",
   },
   {
     q: "How many guests can I book for?",

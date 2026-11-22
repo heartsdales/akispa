@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 
 const nav = [
-  { href: "#experience", label: "Experience" },
+  { href: "#booking", label: "Treatments" },
   { href: "#booking", label: "Reservations" },
   { href: "#faq", label: "FAQ" },
   { href: "#visit", label: "Contact" },
@@ -18,7 +18,7 @@ export function SiteHeader() {
         <nav aria-label="Main" className="flex items-center gap-6 text-[13px]">
           <ul className="hidden items-center gap-6 md:flex">
             {nav.map((item) => (
-              <li key={item.href}>
+              <li key={item.label}>
                 <a href={item.href} className="transition-colors hover:text-primary">
                   {item.label}
                 </a>

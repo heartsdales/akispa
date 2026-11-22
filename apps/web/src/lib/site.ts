@@ -1,3 +1,5 @@
+import { maxDiscount } from "./booking";
+
 /**
  * Site-wide business information. Used for metadata, JSON-LD and page copy.
  * TODO(owner): confirm address, phone and opening hours before launch.
@@ -16,15 +18,15 @@ export const site = {
   tagline: "Rest · Restore · Reconnect",
   title: "Akispa | Massage & Spa in Kota Kinabalu – Book Online",
   description:
-    "Akispa is a calm day spa on Gaya Street, Kota Kinabalu. Book a 60, 90 or 120-minute massage session online and save up to 60% with off-peak time-slot discounts.",
+    `Akispa is a calm day spa on Gaya Street, Kota Kinabalu. Book Urut Aroma, Urut Kering or Lava Luxe hot stone massage online and save up to ${maxDiscount}% with off-peak time-slot discounts.`,
   keywords: [
     "spa Kota Kinabalu",
     "massage Kota Kinabalu",
     "Gaya Street spa",
     "加雅街 按摩",
     "aromatherapy massage",
-    "deep tissue massage",
-    "couples spa Sabah",
+    "traditional Malay massage",
+    "hot stone massage",
   ],
   locale: "en_MY",
   currency: "MYR",

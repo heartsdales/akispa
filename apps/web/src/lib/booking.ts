@@ -10,24 +10,36 @@ export type Outlet = { id: string; name: string };
 
 export type Duration = 60 | 90 | 120;
 
-export type Treatment = "aroma" | "traditional" | "luca";
+export type Treatment = "urut-aroma" | "urut-kering" | "lava-luxe";
 
-export const treatmentOptions: { value: Treatment; label: string }[] = [
-  { value: "aroma", label: "Aroma massage" },
-  { value: "traditional", label: "Traditional massage" },
-  { value: "luca", label: "Luca massage" },
+export type TreatmentOption = {
+  value: Treatment;
+  label: string;
+  /** Basic session price per guest, in whole ringgit, for each duration offered. */
+  prices: Partial<Record<Duration, number>>;
+};
+
+export const treatmentOptions: TreatmentOption[] = [
+  { value: "urut-aroma", label: "Urut Aroma 传统精油按摩", prices: { 60: 110, 90: 150, 120: 175 } },
+  { value: "urut-kering", label: "Urut Kering 传统马来按摩", prices: { 60: 150, 90: 170 } },
+  { value: "lava-luxe", label: "Lava Luxe 热石按摩", prices: { 90: 145, 120: 175 } },
 ];
+
+export const getTreatment = (value: Treatment) =>
+  treatmentOptions.find((t) => t.value === value) ?? treatmentOptions[0];
+
+/** Durations a treatment is offered in, shortest first. */
+export const durationsFor = (value: Treatment) =>
+  (Object.keys(getTreatment(value).prices).map(Number) as Duration[]).sort((a, b) => a - b);
+
+/** Every listed price, for price ranges and structured data. */
+export const allPrices = treatmentOptions.flatMap((t) => Object.values(t.prices) as number[]);
 
 export type TherapistPreference = "any" | "female" | "male";
 
 export type Slot = { time: string; discountPercent: number };
 
 export const outlets: Outlet[] = [{ id: "gaya-street", name: "Gaya Street 加雅街" }];
-
-/** Basic session price per guest, in whole ringgit. */
-export const sessionPrices: Record<Duration, number> = { 60: 120, 90: 180, 120: 230 };
-
-export const durations = Object.keys(sessionPrices).map(Number) as Duration[];
 
 export const therapistOptions: { value: TherapistPreference; label: string }[] = [
   { value: "any", label: "Any therapist" },
@@ -39,19 +51,23 @@ export const MIN_GUESTS = 1;
 export const MAX_GUESTS = 8;
 export const BOOKING_WINDOW_DAYS = 60;
 
-const slotDiscounts = [
-  58, 58, 58, 58, 50, 50, 45, 45, 43, 40, 40, 40, 40, 40, 50, 55, 55, 55, 55, 40, 40, 40, 50, 50, 60,
-];
+/** Off-peak discount by start time (minutes after midnight). */
+function discountAt(minutes: number): number {
+  if (minutes < 13 * 60) return 38; // 11:00–12:30
+  if (minutes < 17 * 60) return 30; // 13:00–16:30
+  if (minutes <= 20 * 60 + 30) return 25; // 17:00–20:30
+  return 28; // 21:00–23:00
+}
 
 /** 11:00 to 23:00 in 30-minute steps, each with its off-peak discount. */
-export const slots: Slot[] = slotDiscounts.map((discountPercent, i) => {
+export const slots: Slot[] = Array.from({ length: 25 }, (_, i) => {
   const minutes = 11 * 60 + i * 30;
   const hh = String(Math.floor(minutes / 60)).padStart(2, "0");
   const mm = String(minutes % 60).padStart(2, "0");
-  return { time: `${hh}:${mm}`, discountPercent };
+  return { time: `${hh}:${mm}`, discountPercent: discountAt(minutes) };
 });
 
-export const maxDiscount = Math.max(...slotDiscounts);
+export const maxDiscount = Math.max(...slots.map((s) => s.discountPercent));
 
 export type Quote = {
   base: number;
@@ -61,8 +77,8 @@ export type Quote = {
 };
 
 /** All amounts in sen (1/100 RM) to avoid floating point drift. */
-export function quote(duration: Duration, guests: number, time: string): Quote {
-  const base = sessionPrices[duration] * guests * 100;
+export function quote(treatment: Treatment, duration: Duration, guests: number, time: string): Quote {
+  const base = (getTreatment(treatment).prices[duration] ?? 0) * guests * 100;
   const discountPercent = slots.find((s) => s.time === time)?.discountPercent ?? 0;
   const savings = Math.round((base * discountPercent) / 100);
   return { base, discountPercent, savings, total: base - savings };

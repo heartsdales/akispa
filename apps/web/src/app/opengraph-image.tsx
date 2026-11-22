@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { maxDiscount } from "@/lib/booking";
 import { site } from "@/lib/site";
 
 export const alt = `${site.name} – ${site.tagline}`;
@@ -34,7 +35,7 @@ export default function OpengraphImage() {
             fontFamily: "sans-serif",
           }}
         >
-          Book online · save up to 60%
+          {`Book online · save up to ${maxDiscount}%`}
         </div>
       </div>
     ),
