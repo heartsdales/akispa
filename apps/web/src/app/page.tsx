@@ -1,4 +1,5 @@
 import { BookingForm } from "@/components/booking/BookingForm";
+import { ContactBubbles } from "@/components/ContactBubbles";
 import { Hero } from "@/components/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Faq, faqs } from "@/components/sections/Faq";
@@ -75,7 +76,7 @@ export default function HomePage() {
             Book Your Experience
           </h2>
           <p className="mt-2 mb-10 text-center text-muted">
-            Choose your treatment, session duration, and preferred appointment time.
+            Choose your outlet and timeslot, then select your treatment and personalize your visit.
           </p>
           <BookingForm />
         </section>
@@ -84,6 +85,7 @@ export default function HomePage() {
         <Visit />
       </main>
       <SiteFooter />
+      <ContactBubbles />
     </>
   );
 }

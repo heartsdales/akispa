@@ -11,7 +11,7 @@ const features = [
   },
   {
     title: "Your therapist, your way",
-    body: "Tell us if you prefer a female or male therapist and how many guests are coming — up to eight in one reservation.",
+    body: "Tell us if you prefer a female or male therapist and how many guests are coming — up to seven in one reservation.",
   },
 ];
 

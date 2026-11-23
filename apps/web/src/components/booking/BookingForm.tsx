@@ -103,108 +103,27 @@ export function BookingForm() {
     <>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.65fr)_minmax(300px,1fr)]">
         <div className="space-y-5">
-          {/* 01 Location & duration */}
+          {/* 01 Outlet */}
           <section className="panel" aria-labelledby={`${ids.outlet}-h`}>
             <h3 id={`${ids.outlet}-h`} className="panel-title">
-              01. Choose Your Location
+              01. Choose Outlet
             </h3>
             <label htmlFor={ids.outlet} className="field-label">
               Spa outlet
             </label>
-            <select id={ids.outlet} className="input mb-5" value={outletId} onChange={(e) => setOutletId(e.target.value)}>
+            <select id={ids.outlet} className="input" value={outletId} onChange={(e) => setOutletId(e.target.value)}>
               {outlets.map((o) => (
                 <option key={o.id} value={o.id}>
                   {o.name}
                 </option>
               ))}
             </select>
-            <p id={ids.treatment} className="field-label">
-              Choose your treatment
-            </p>
-            <div role="group" aria-labelledby={ids.treatment} className="mb-6 grid gap-3 sm:grid-cols-2">
-              {treatmentOptions.map((t) => (
-                <button
-                  key={t.value}
-                  type="button"
-                  className="chip min-h-[105px] rounded-[9px] p-[17px] text-left"
-                  aria-pressed={treatment === t.value}
-                  onClick={() => setTreatment(t.value)}
-                >
-                  <span className="mb-2 block font-bold">{t.label}</span>
-                  {durationsFor(t.value).map((d) => (
-                    <span key={d} className="block text-xs text-muted">
-                      {d} mins · RM{t.prices[d]}
-                    </span>
-                  ))}
-                </button>
-              ))}
-            </div>
-            <p id={ids.duration} className="field-label">
-              Choose your session duration
-            </p>
-            <div role="group" aria-labelledby={ids.duration} className="flex flex-wrap gap-2.5">
-              {durations.map((d) => (
-                <button key={d} type="button" className="chip" aria-pressed={duration === d} onClick={() => setDuration(d)}>
-                  {d} mins · RM{service.prices[d]}
-                </button>
-              ))}
-            </div>
           </section>
 
-          {/* 02 Personalise */}
-          <section className="panel" aria-labelledby={`${ids.guests}-h`}>
-            <h3 id={`${ids.guests}-h`} className="panel-title">
-              02. Personalize Your Visit
-            </h3>
-            <p id={ids.guests} className="field-label">
-              Number of guests
-            </p>
-            <div role="group" aria-labelledby={ids.guests} className="mb-6 flex items-center gap-4">
-              <button
-                type="button"
-                className="grid size-10 place-items-center rounded-full border border-line-strong bg-white text-lg disabled:opacity-40"
-                onClick={() => setGuests((g) => Math.max(MIN_GUESTS, g - 1))}
-                disabled={guests <= MIN_GUESTS}
-                aria-label="Remove a guest"
-              >
-                −
-              </button>
-              <output aria-live="polite" className="min-w-6 text-center text-lg font-bold">
-                {guests}
-              </output>
-              <button
-                type="button"
-                className="grid size-10 place-items-center rounded-full border border-line-strong bg-white text-lg disabled:opacity-40"
-                onClick={() => setGuests((g) => Math.min(MAX_GUESTS, g + 1))}
-                disabled={guests >= MAX_GUESTS}
-                aria-label="Add a guest"
-              >
-                +
-              </button>
-              <span className="text-xs text-muted">Up to {MAX_GUESTS} guests</span>
-            </div>
-            <p id={ids.therapist} className="field-label">
-              Therapist preference
-            </p>
-            <div role="group" aria-labelledby={ids.therapist} className="flex flex-wrap gap-2.5">
-              {therapistOptions.map((t) => (
-                <button
-                  key={t.value}
-                  type="button"
-                  className="chip"
-                  aria-pressed={therapist === t.value}
-                  onClick={() => setTherapist(t.value)}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* 03 Date & time */}
+          {/* 02 Timeslot */}
           <section className="panel" aria-labelledby={`${ids.date}-h`}>
             <h3 id={`${ids.date}-h`} className="panel-title">
-              03. Select Date &amp; Time
+              02. Choose Timeslot
             </h3>
             <label htmlFor={ids.date} className="field-label">
               Appointment date
@@ -250,8 +169,97 @@ export function BookingForm() {
               })}
             </div>
             <p className="mt-4 text-xs leading-relaxed text-muted">
-              Live therapist availability is confirmed after booking. {today ? "" : "Loading today's slots…"}
+              Maximum {MAX_GUESTS} guests at any moment. Live therapist availability is confirmed after booking.{" "}
+              {today ? "" : "Loading today's slots…"}
             </p>
+          </section>
+
+          {/* 03 Treatment */}
+          <section className="panel" aria-labelledby={`${ids.treatment}-h`}>
+            <h3 id={`${ids.treatment}-h`} className="panel-title">
+              03. Choose Treatment
+            </h3>
+            <p id={ids.treatment} className="field-label">
+              Choose your treatment
+            </p>
+            <div role="group" aria-labelledby={ids.treatment} className="mb-6 grid gap-3 sm:grid-cols-2">
+              {treatmentOptions.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  className="chip min-h-[105px] rounded-[9px] p-[17px] text-left"
+                  aria-pressed={treatment === t.value}
+                  onClick={() => setTreatment(t.value)}
+                >
+                  <span className="mb-2 block font-bold">{t.label}</span>
+                  {durationsFor(t.value).map((d) => (
+                    <span key={d} className="block text-xs text-muted">
+                      {d} mins · RM{t.prices[d]}
+                    </span>
+                  ))}
+                </button>
+              ))}
+            </div>
+            <p id={ids.duration} className="field-label">
+              Choose your session duration
+            </p>
+            <div role="group" aria-labelledby={ids.duration} className="flex flex-wrap gap-2.5">
+              {durations.map((d) => (
+                <button key={d} type="button" className="chip" aria-pressed={duration === d} onClick={() => setDuration(d)}>
+                  {d} mins · RM{service.prices[d]}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* 04 Personalise */}
+          <section className="panel" aria-labelledby={`${ids.guests}-h`}>
+            <h3 id={`${ids.guests}-h`} className="panel-title">
+              04. Personalize Your Visit
+            </h3>
+            <p id={ids.guests} className="field-label">
+              Number of guests
+            </p>
+            <div role="group" aria-labelledby={ids.guests} className="mb-6 flex items-center gap-4">
+              <button
+                type="button"
+                className="grid size-10 place-items-center rounded-full border border-line-strong bg-white text-lg disabled:opacity-40"
+                onClick={() => setGuests((g) => Math.max(MIN_GUESTS, g - 1))}
+                disabled={guests <= MIN_GUESTS}
+                aria-label="Remove a guest"
+              >
+                −
+              </button>
+              <output aria-live="polite" className="min-w-6 text-center text-lg font-bold">
+                {guests}
+              </output>
+              <button
+                type="button"
+                className="grid size-10 place-items-center rounded-full border border-line-strong bg-white text-lg disabled:opacity-40"
+                onClick={() => setGuests((g) => Math.min(MAX_GUESTS, g + 1))}
+                disabled={guests >= MAX_GUESTS}
+                aria-label="Add a guest"
+              >
+                +
+              </button>
+              <span className="text-xs text-muted">Up to {MAX_GUESTS} guests</span>
+            </div>
+            <p id={ids.therapist} className="field-label">
+              Therapist preference
+            </p>
+            <div role="group" aria-labelledby={ids.therapist} className="flex flex-wrap gap-2.5">
+              {therapistOptions.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  className="chip"
+                  aria-pressed={therapist === t.value}
+                  onClick={() => setTherapist(t.value)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
           </section>
         </div>
 

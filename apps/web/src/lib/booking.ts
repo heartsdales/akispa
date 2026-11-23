@@ -48,7 +48,8 @@ export const therapistOptions: { value: TherapistPreference; label: string }[] =
 ];
 
 export const MIN_GUESTS = 1;
-export const MAX_GUESTS = 8;
+/** The spa seats at most this many guests at any moment. */
+export const MAX_GUESTS = 7;
 export const BOOKING_WINDOW_DAYS = 60;
 
 /** Off-peak discount by start time (minutes after midnight). */

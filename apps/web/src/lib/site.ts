@@ -42,6 +42,10 @@ export const site = {
   // Leave empty until confirmed; omitted from structured data when blank.
   phone: "" as string,
   email: "" as string,
+  // Floating contact bubbles; each shows only once filled in.
+  whatsapp: "" as string, // digits with country code, e.g. 60123456789
+  wechatUrl: "" as string, // official WeChat contact link (https://…)
+  wechatId: "" as string, // used when there is no link: copied for the guest to search
   openingHours: { opens: "11:00", closes: "23:59", label: "Daily, 11:00 AM – late (last booking 11:00 PM)" },
 } as const;
 

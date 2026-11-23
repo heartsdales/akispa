@@ -9,7 +9,7 @@ export const faqs = [
   },
   {
     q: "How many guests can I book for?",
-    a: "Up to eight guests per reservation. The price shown is the total for all guests.",
+    a: "Up to seven guests per reservation — the most we can host at any one time. The price shown is the total for all guests.",
   },
   {
     q: "Can I request a female or male therapist?",
